@@ -1,0 +1,5 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+discovery_v3,babe,discovery,jev_anchored,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,200,200,1.0,0.79,0.7898108297467721,0.7898108297467721,2,2,0.9839932244212757,200,0.3330779999999999,1.0,,,,,,
+discovery_v3,babe,discovery,jev_compact,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,200,200,1.0,0.775,0.7747240369452579,0.7747240369452579,2,2,0.9641528650786582,200,0.32995300000000005,1.0,,,,,,
+discovery_v3,babe,discovery,jev_verbose,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,200,200,1.0,0.82,0.8191136569189026,0.8191136569189026,2,2,0.5950306571753302,200,0.2568159999999999,1.0,,,,,,
+discovery_v3,babe,discovery,llm_direct,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,200,200,1.0,0.805,0.804172629359042,0.804172629359042,2,2,,0,,0.0,,,,,,

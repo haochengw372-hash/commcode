@@ -1,0 +1,13 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+discovery_v3,taskmap,discovery,jev_anchored,Q2intel_manip_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.060800578769057034,0.07813686845306798,0.060800578769057034,0.07813686845306798,,0.0
+discovery_v3,taskmap,discovery,jev_anchored,Q5creativity_input_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.2484116883116883,0.27232754031434414,0.2484116883116883,0.27232754031434414,,0.0
+discovery_v3,taskmap,discovery,jev_anchored,Q21intellective_judg_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.11991118953510257,0.16324255616058905,0.11991118953510257,0.16324255616058905,,0.0
+discovery_v3,taskmap,discovery,jev_compact,Q2intel_manip_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.06530057876905702,0.08457764159651687,0.06530057876905702,0.08457764159651687,,0.0
+discovery_v3,taskmap,discovery,jev_compact,Q5creativity_input_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.2424116883116883,0.2653022576159835,0.2424116883116883,0.2653022576159835,,0.0
+discovery_v3,taskmap,discovery,jev_compact,Q21intellective_judg_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.11757785620176923,0.16172983532082985,0.11757785620176923,0.16172983532082985,,0.0
+discovery_v3,taskmap,discovery,jev_verbose,Q2intel_manip_1,True,score,continuous_rating,,"[0, 1]",20,0,0.0,,,,,,,,,,,,,,,0.0
+discovery_v3,taskmap,discovery,jev_verbose,Q5creativity_input_1,True,score,continuous_rating,,"[0, 1]",20,0,0.0,,,,,,,,,,,,,,,0.0
+discovery_v3,taskmap,discovery,jev_verbose,Q21intellective_judg_1,True,score,continuous_rating,,"[0, 1]",20,0,0.0,,,,,,,,,,,,,,,0.0
+discovery_v3,taskmap,discovery,llm_direct,Q2intel_manip_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.04630449369471108,0.05808632913771342,0.04630449369471108,0.05808632913771342,,0.0
+discovery_v3,taskmap,discovery,llm_direct,Q5creativity_input_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.07844106907585167,0.09060134868752041,0.07844106907585167,0.09060134868752041,,0.0
+discovery_v3,taskmap,discovery,llm_direct,Q21intellective_judg_1,True,score,continuous_rating,,"[0, 1]",20,20,1.0,,,,,,,,,,0.1548689346884999,0.18062357380216076,0.1548689346884999,0.18062357380216076,,0.0

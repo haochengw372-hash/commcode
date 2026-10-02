@@ -1,0 +1,5 @@
+selection_epoch,held_task,selected_family,training_tasks,selection_mean_macro_f1,held_task_macro_f1,selection_scope,independent_architecture_confirmation,diagnostic_exposure_cannot_be_erased
+discovery_v3,mbd,jev_verbose,"[""babe"", ""conflict"", ""ucc""]",0.5988203122105485,0.7044629002483124,prompt family only; development outputs; exploratory,False,True
+discovery_v3,babe,jev_verbose,"[""mbd"", ""conflict"", ""ucc""]",0.5606033933203519,0.8191136569189026,prompt family only; development outputs; exploratory,False,True
+discovery_v3,conflict,jev_verbose,"[""mbd"", ""babe"", ""ucc""]",0.6533869853453685,0.5407628808438525,prompt family only; development outputs; exploratory,False,True
+discovery_v3,ucc,jev_verbose,"[""mbd"", ""babe"", ""conflict""]",0.6881131460036891,0.4365843988688907,prompt family only; development outputs; exploratory,False,True

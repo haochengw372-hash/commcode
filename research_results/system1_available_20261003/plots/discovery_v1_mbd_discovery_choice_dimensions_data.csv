@@ -1,0 +1,13 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+discovery_v1,mbd,discovery,jev_anchored,type,True,choice,category,"[""fact"", ""opinion"", ""borderline"", ""quote"", ""other""]",,24,0,0.0,0.0,0.0,0.0,5,3,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_anchored,tone,True,choice,category,"[""positive"", ""negative"", ""neutral""]",,24,0,0.0,0.0,0.0,0.0,3,2,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_anchored,focus,True,choice,category,"[""democrat"", ""republican"", ""both"", ""neither""]",,24,0,0.0,0.0,0.0,0.0,4,1,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_compact,type,True,choice,category,"[""fact"", ""opinion"", ""borderline"", ""quote"", ""other""]",,24,0,0.0,0.0,0.0,0.0,5,3,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_compact,tone,True,choice,category,"[""positive"", ""negative"", ""neutral""]",,24,0,0.0,0.0,0.0,0.0,3,2,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_compact,focus,True,choice,category,"[""democrat"", ""republican"", ""both"", ""neither""]",,24,0,0.0,0.0,0.0,0.0,4,1,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_verbose,type,True,choice,category,"[""fact"", ""opinion"", ""borderline"", ""quote"", ""other""]",,24,0,0.0,0.0,0.0,0.0,5,3,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_verbose,tone,True,choice,category,"[""positive"", ""negative"", ""neutral""]",,24,0,0.0,0.0,0.0,0.0,3,2,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,jev_verbose,focus,True,choice,category,"[""democrat"", ""republican"", ""both"", ""neither""]",,24,0,0.0,0.0,0.0,0.0,4,1,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,llm_direct,type,True,choice,category,"[""fact"", ""opinion"", ""borderline"", ""quote"", ""other""]",,24,24,1.0,0.6666666666666666,0.37444444444444447,0.6240740740740741,5,3,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,llm_direct,tone,True,choice,category,"[""positive"", ""negative"", ""neutral""]",,24,24,1.0,0.75,0.4444444444444445,0.6666666666666667,3,2,,0,,0.0,,,,,,
+discovery_v1,mbd,discovery,llm_direct,focus,True,choice,category,"[""democrat"", ""republican"", ""both"", ""neither""]",,24,24,1.0,1.0,0.25,1.0,4,1,,0,,0.0,,,,,,

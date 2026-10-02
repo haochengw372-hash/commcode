@@ -1,0 +1,7 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+smoke_taskmap_v3,taskmap,discovery,jev_compact,Q2intel_manip_1,True,score,continuous_rating,,"[0, 1]",11,11,1.0,,,,,,,,,,0.05685384904950122,0.06562975160526013,0.05685384904950122,0.06562975160526013,,0.0
+smoke_taskmap_v3,taskmap,discovery,jev_compact,Q5creativity_input_1,True,score,continuous_rating,,"[0, 1]",11,11,1.0,,,,,,,,,,0.2806192957240388,0.2957904747376503,0.2806192957240388,0.2957904747376503,,0.0
+smoke_taskmap_v3,taskmap,discovery,jev_compact,Q21intellective_judg_1,True,score,continuous_rating,,"[0, 1]",11,11,1.0,,,,,,,,,,0.1364434235066646,0.1649872639805362,0.1364434235066646,0.1649872639805362,,0.0
+smoke_taskmap_v3,taskmap,discovery,llm_direct,Q2intel_manip_1,True,score,continuous_rating,,"[0, 1]",11,11,1.0,,,,,,,,,,0.04354140786749483,0.05036455692903156,0.04354140786749483,0.05036455692903156,,0.0
+smoke_taskmap_v3,taskmap,discovery,llm_direct,Q5creativity_input_1,True,score,continuous_rating,,"[0, 1]",11,11,1.0,,,,,,,,,,0.07739795185052101,0.09150342565302352,0.07739795185052101,0.09150342565302352,,0.0
+smoke_taskmap_v3,taskmap,discovery,llm_direct,Q21intellective_judg_1,True,score,continuous_rating,,"[0, 1]",11,11,1.0,,,,,,,,,,0.14493207056448165,0.1805912998534229,0.14493207056448165,0.1805912998534229,,0.0

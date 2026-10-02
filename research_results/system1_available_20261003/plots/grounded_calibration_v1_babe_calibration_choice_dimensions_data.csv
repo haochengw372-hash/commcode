@@ -1,0 +1,3 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+grounded_calibration_v1,babe,calibration,jev_grounded,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,201,201,1.0,0.746268656716418,0.7453610552202101,0.7453610552202101,2,2,0.7482869268676062,201,0.4001323383084576,1.0,,,,,,
+grounded_calibration_v1,babe,calibration,llm_grounded,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,201,201,1.0,0.8308457711442786,0.8296270442760272,0.8296270442760272,2,2,,0,,0.0,,,,,,

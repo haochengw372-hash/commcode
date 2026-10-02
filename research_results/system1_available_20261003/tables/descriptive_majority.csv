@@ -1,0 +1,73 @@
+epoch,dataset,split,dimension_id,method,majority_label,n_reference,accuracy,macro_f1,primary,cost_comparison_eligible
+calibration_v1,babe,calibration,label_bias,reference_majority_constant_descriptive,Non-biased,201,0.5621890547263682,0.35987261146496813,True,False
+calibration_v1,conflict,calibration,rating_directness_content,reference_majority_constant_descriptive,Yes - Direct Content,98,1.0,0.3333333333333333,True,False
+calibration_v1,conflict,calibration,rating_directness_expression,reference_majority_constant_descriptive,Yes - Direct Expression,98,0.9591836734693877,0.4895833333333333,True,False
+calibration_v1,conflict,calibration,rating_OI_content,reference_majority_constant_descriptive,Yes - Content opposes someone else,98,0.9795918367346939,0.4948453608247423,True,False
+calibration_v1,conflict,calibration,rating_OI_expression,reference_majority_constant_descriptive,No - Expression is not emotional/forceful,98,0.8877551020408163,0.4702702702702703,True,False
+calibration_v1,mbd,calibration,type,reference_majority_constant_descriptive,fact,234,0.5427350427350427,0.1407202216066482,True,False
+calibration_v1,mbd,calibration,tone,reference_majority_constant_descriptive,neutral,241,0.8464730290456431,0.3056179775280899,True,False
+calibration_v1,mbd,calibration,focus,reference_majority_constant_descriptive,neither,239,0.5983263598326359,0.18717277486910994,True,False
+calibration_v1,ucc,calibration,healthy,reference_majority_constant_descriptive,1,205,0.9560975609756097,0.48877805486284287,True,False
+calibration_v1,ucc,calibration,sarcastic,reference_majority_constant_descriptive,0,205,0.9512195121951219,0.4875,True,False
+calibration_v1,ucc,calibration,generalisation,reference_majority_constant_descriptive,0,205,0.9902439024390244,0.49754901960784315,False,False
+calibration_v1,ucc,calibration,generalisation_unfair,reference_majority_constant_descriptive,0,205,0.9902439024390244,0.49754901960784315,True,False
+calibration_v1,ucc,calibration,hostile,reference_majority_constant_descriptive,0,205,0.9853658536585366,0.4963144963144963,True,False
+calibration_v1,ucc,calibration,antagonize,reference_majority_constant_descriptive,0,205,0.9707317073170731,0.49257425742574257,True,False
+calibration_v1,ucc,calibration,condescending,reference_majority_constant_descriptive,0,205,0.9707317073170731,0.49257425742574257,True,False
+calibration_v1,ucc,calibration,dismissive,reference_majority_constant_descriptive,0,205,0.9560975609756097,0.48877805486284287,True,False
+diagnostic_v1,babe,diagnostic,label_bias,reference_majority_constant_descriptive,Non-biased,1000,0.511,0.3381866313699537,True,False
+diagnostic_v1,conflict,diagnostic,rating_directness_content,reference_majority_constant_descriptive,Yes - Direct Content,797,0.9924717691342535,0.3320738874895046,True,False
+diagnostic_v1,conflict,diagnostic,rating_directness_expression,reference_majority_constant_descriptive,Yes - Direct Expression,802,0.9326683291770573,0.48258064516129034,True,False
+diagnostic_v1,conflict,diagnostic,rating_OI_content,reference_majority_constant_descriptive,Yes - Content opposes someone else,802,0.9226932668329177,0.4798962386511025,True,False
+diagnostic_v1,conflict,diagnostic,rating_OI_expression,reference_majority_constant_descriptive,No - Expression is not emotional/forceful,802,0.9089775561097256,0.4761593729588504,True,False
+diagnostic_v1,mbd,diagnostic,tone,reference_majority_constant_descriptive,neutral,544,0.6966911764705882,0.2737450343084146,True,False
+diagnostic_v1,mbd,diagnostic,focus,reference_majority_constant_descriptive,neither,546,0.5347985347985348,0.17422434367541767,True,False
+diagnostic_v1,mbd,diagnostic,type,reference_majority_constant_descriptive,fact,508,0.4704724409448819,0.12797858099062917,True,False
+diagnostic_v1,ucc,diagnostic,healthy,reference_majority_constant_descriptive,1,1002,0.935129740518962,0.48323878287777206,True,False
+diagnostic_v1,ucc,diagnostic,sarcastic,reference_majority_constant_descriptive,0,1002,0.9520958083832335,0.48773006134969327,True,False
+diagnostic_v1,ucc,diagnostic,generalisation,reference_majority_constant_descriptive,0,1002,0.9850299401197605,0.4962292609351433,False,False
+diagnostic_v1,ucc,diagnostic,generalisation_unfair,reference_majority_constant_descriptive,0,1002,0.9860279441117764,0.4964824120603015,True,False
+diagnostic_v1,ucc,diagnostic,hostile,reference_majority_constant_descriptive,0,1002,0.9790419161676647,0.4947049924357035,True,False
+diagnostic_v1,ucc,diagnostic,antagonize,reference_majority_constant_descriptive,0,1002,0.9491017964071856,0.4869431643625192,True,False
+diagnostic_v1,ucc,diagnostic,condescending,reference_majority_constant_descriptive,0,1002,0.9530938123752495,0.48799182422074605,True,False
+diagnostic_v1,ucc,diagnostic,dismissive,reference_majority_constant_descriptive,0,1002,0.9760479041916168,0.49393939393939396,True,False
+discovery_v1,babe,discovery,label_bias,reference_majority_constant_descriptive,Non-biased,32,0.5625,0.36,True,False
+discovery_v1,conflict,discovery,rating_directness_content,reference_majority_constant_descriptive,Yes - Direct Content,32,1.0,0.3333333333333333,True,False
+discovery_v1,conflict,discovery,rating_directness_expression,reference_majority_constant_descriptive,Yes - Direct Expression,32,0.96875,0.49206349206349204,True,False
+discovery_v1,conflict,discovery,rating_OI_content,reference_majority_constant_descriptive,Yes - Content opposes someone else,32,0.96875,0.49206349206349204,True,False
+discovery_v1,conflict,discovery,rating_OI_expression,reference_majority_constant_descriptive,No - Expression is not emotional/forceful,32,0.875,0.4666666666666667,True,False
+discovery_v1,mbd,discovery,type,reference_majority_constant_descriptive,fact,24,0.7916666666666666,0.17674418604651163,True,False
+discovery_v1,mbd,discovery,tone,reference_majority_constant_descriptive,neutral,24,0.875,0.3111111111111111,True,False
+discovery_v1,mbd,discovery,focus,reference_majority_constant_descriptive,neither,24,1.0,0.25,True,False
+discovery_v2,babe,discovery,label_bias,reference_majority_constant_descriptive,Biased,200,0.515,0.33993399339933994,True,False
+discovery_v2,conflict,discovery,rating_directness_content,reference_majority_constant_descriptive,Yes - Direct Content,92,1.0,0.3333333333333333,True,False
+discovery_v2,conflict,discovery,rating_directness_expression,reference_majority_constant_descriptive,Yes - Direct Expression,92,0.9456521739130435,0.4860335195530726,True,False
+discovery_v2,conflict,discovery,rating_OI_content,reference_majority_constant_descriptive,Yes - Content opposes someone else,92,0.9782608695652174,0.4945054945054945,True,False
+discovery_v2,conflict,discovery,rating_OI_expression,reference_majority_constant_descriptive,No - Expression is not emotional/forceful,92,0.8260869565217391,0.4523809523809524,True,False
+discovery_v2,mbd,discovery,type,reference_majority_constant_descriptive,fact,209,0.507177033492823,0.1346031746031746,True,False
+discovery_v2,mbd,discovery,tone,reference_majority_constant_descriptive,neutral,210,0.7761904761904762,0.291331546023235,True,False
+discovery_v2,mbd,discovery,focus,reference_majority_constant_descriptive,neither,204,0.7058823529411765,0.20689655172413793,True,False
+discovery_v2,ucc,discovery,healthy,reference_majority_constant_descriptive,1,210,0.9142857142857143,0.47761194029850745,True,False
+discovery_v2,ucc,discovery,sarcastic,reference_majority_constant_descriptive,0,210,0.9761904761904762,0.4939759036144578,True,False
+discovery_v2,ucc,discovery,generalisation,reference_majority_constant_descriptive,0,210,0.9857142857142858,0.49640287769784175,False,False
+discovery_v2,ucc,discovery,generalisation_unfair,reference_majority_constant_descriptive,0,210,0.9857142857142858,0.49640287769784175,True,False
+discovery_v2,ucc,discovery,hostile,reference_majority_constant_descriptive,0,210,0.9904761904761905,0.49760765550239233,True,False
+discovery_v2,ucc,discovery,antagonize,reference_majority_constant_descriptive,0,210,0.9666666666666667,0.4915254237288136,True,False
+discovery_v2,ucc,discovery,condescending,reference_majority_constant_descriptive,0,210,0.9809523809523809,0.4951923076923077,True,False
+discovery_v2,ucc,discovery,dismissive,reference_majority_constant_descriptive,0,210,0.9857142857142858,0.49640287769784175,True,False
+discovery_v3,babe,discovery,label_bias,reference_majority_constant_descriptive,Biased,200,0.515,0.33993399339933994,True,False
+discovery_v3,conflict,discovery,rating_directness_content,reference_majority_constant_descriptive,Yes - Direct Content,92,1.0,0.3333333333333333,True,False
+discovery_v3,conflict,discovery,rating_directness_expression,reference_majority_constant_descriptive,Yes - Direct Expression,92,0.9456521739130435,0.4860335195530726,True,False
+discovery_v3,conflict,discovery,rating_OI_content,reference_majority_constant_descriptive,Yes - Content opposes someone else,92,0.9782608695652174,0.4945054945054945,True,False
+discovery_v3,conflict,discovery,rating_OI_expression,reference_majority_constant_descriptive,No - Expression is not emotional/forceful,92,0.8260869565217391,0.4523809523809524,True,False
+discovery_v3,mbd,discovery,type,reference_majority_constant_descriptive,fact,209,0.507177033492823,0.1346031746031746,True,False
+discovery_v3,mbd,discovery,tone,reference_majority_constant_descriptive,neutral,210,0.7761904761904762,0.291331546023235,True,False
+discovery_v3,mbd,discovery,focus,reference_majority_constant_descriptive,neither,204,0.7058823529411765,0.20689655172413793,True,False
+discovery_v3,ucc,discovery,healthy,reference_majority_constant_descriptive,1,210,0.9142857142857143,0.47761194029850745,True,False
+discovery_v3,ucc,discovery,sarcastic,reference_majority_constant_descriptive,0,210,0.9761904761904762,0.4939759036144578,True,False
+discovery_v3,ucc,discovery,generalisation,reference_majority_constant_descriptive,0,210,0.9857142857142858,0.49640287769784175,False,False
+discovery_v3,ucc,discovery,generalisation_unfair,reference_majority_constant_descriptive,0,210,0.9857142857142858,0.49640287769784175,True,False
+discovery_v3,ucc,discovery,hostile,reference_majority_constant_descriptive,0,210,0.9904761904761905,0.49760765550239233,True,False
+discovery_v3,ucc,discovery,antagonize,reference_majority_constant_descriptive,0,210,0.9666666666666667,0.4915254237288136,True,False
+discovery_v3,ucc,discovery,condescending,reference_majority_constant_descriptive,0,210,0.9809523809523809,0.4951923076923077,True,False
+discovery_v3,ucc,discovery,dismissive,reference_majority_constant_descriptive,0,210,0.9857142857142858,0.49640287769784175,True,False

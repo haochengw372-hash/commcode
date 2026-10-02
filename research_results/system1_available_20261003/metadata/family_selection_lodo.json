@@ -1,0 +1,62 @@
+[
+  {
+    "selection_epoch": "discovery_v3",
+    "held_task": "mbd",
+    "selected_family": "jev_verbose",
+    "training_tasks": [
+      "babe",
+      "conflict",
+      "ucc"
+    ],
+    "selection_mean_macro_f1": 0.5988203122105485,
+    "held_task_macro_f1": 0.7044629002483124,
+    "selection_scope": "prompt family only; development outputs; exploratory",
+    "independent_architecture_confirmation": false,
+    "diagnostic_exposure_cannot_be_erased": true
+  },
+  {
+    "selection_epoch": "discovery_v3",
+    "held_task": "babe",
+    "selected_family": "jev_verbose",
+    "training_tasks": [
+      "mbd",
+      "conflict",
+      "ucc"
+    ],
+    "selection_mean_macro_f1": 0.5606033933203519,
+    "held_task_macro_f1": 0.8191136569189026,
+    "selection_scope": "prompt family only; development outputs; exploratory",
+    "independent_architecture_confirmation": false,
+    "diagnostic_exposure_cannot_be_erased": true
+  },
+  {
+    "selection_epoch": "discovery_v3",
+    "held_task": "conflict",
+    "selected_family": "jev_verbose",
+    "training_tasks": [
+      "mbd",
+      "babe",
+      "ucc"
+    ],
+    "selection_mean_macro_f1": 0.6533869853453685,
+    "held_task_macro_f1": 0.5407628808438525,
+    "selection_scope": "prompt family only; development outputs; exploratory",
+    "independent_architecture_confirmation": false,
+    "diagnostic_exposure_cannot_be_erased": true
+  },
+  {
+    "selection_epoch": "discovery_v3",
+    "held_task": "ucc",
+    "selected_family": "jev_verbose",
+    "training_tasks": [
+      "mbd",
+      "babe",
+      "conflict"
+    ],
+    "selection_mean_macro_f1": 0.6881131460036891,
+    "held_task_macro_f1": 0.4365843988688907,
+    "selection_scope": "prompt family only; development outputs; exploratory",
+    "independent_architecture_confirmation": false,
+    "diagnostic_exposure_cannot_be_erased": true
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "created_at_utc": "2026-10-02T20:59:28.135083+00:00",
+  "status": "frozen_before_new_confirmation_and_paired_timing",
+  "architecture": "original-codebook typed System One compilation + source-group-calibrated original-label decisions + optional bounded LLM assistance",
+  "profile": "native_threshold",
+  "prompt_family": "native",
+  "question_compiler_version": "native-1",
+  "calibration": "same source-group CV proper loss with identity and supported-binary crossfit utility thresholds",
+  "models": {
+    "jev": "jev-1.13.0",
+    "llm": "deepseek-flash",
+    "llm_thinking": "disabled"
+  },
+  "optional_llm_route": "explicit source-calibrated-risk packet/cell budget and actual direct target subset; not the default headline efficiency profile",
+  "selection_reason": "highest four-task equal-weight diagnostic Macro-F1 among completed declared Jev candidates; lower cost than alternative routes, original label spaces and references unchanged",
+  "confirmation_exposure_note": "project-unexposed source groups; public pretraining exposure unknown",
+  "timing": "at least 3 randomized paired full-workflow repeats with equal outstanding requests; no reused-output wall claim",
+  "success_dimensions": "at least 2 supported cost / wall time / quality advantages; quality gaps reported separately, not inferred away",
+  "default_physical_packet_fraction_budget": 0,
+  "default_within_packet_cell_fraction_budget": 1
+}

@@ -1,0 +1,2 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+threshold_redecode_v1,babe,diagnostic,jev_threshold_calibrated,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,1000,1000,1.0,0.781,0.7775238095238095,0.7775238095238095,2,2,0.5298206506299806,1000,0.27210817796103637,1.0,,,,,,

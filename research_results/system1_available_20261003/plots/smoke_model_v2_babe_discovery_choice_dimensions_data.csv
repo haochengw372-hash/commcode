@@ -1,0 +1,2 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+smoke_model_v2,babe,discovery,jev_compact,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,16,16,1.0,0.6875,0.6862745098039216,0.6862745098039216,2,2,0.5851478475001387,16,0.36638750000000003,1.0,,,,,,

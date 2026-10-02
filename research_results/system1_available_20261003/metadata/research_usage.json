@@ -1,0 +1,8 @@
+{
+  "unique_dispatch_journals": 10254,
+  "usage_known_journals": 9722,
+  "unknown_billing_journals": 532,
+  "known_cold_cost_usd_low": 13.486232922,
+  "known_cold_cost_usd_high": 25.009977371999998,
+  "note": "Known-cost subtotal excludes unknown billing attempts; not invoice. Each actual journal counted once."
+}

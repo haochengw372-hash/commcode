@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "created_at_utc": "2026-10-02T21:41:32.566086+00:00",
+  "files_audited": 807,
+  "figure_files": 579,
+  "source_hashes_rechecked": true,
+  "unit_level_outputs_exported": false,
+  "secret_and_private_path_patterns": "passed",
+  "pdf_extracted_text_audit": "passed",
+  "csv_schema_allowlist": "passed",
+  "excluded_original_tables": [
+    "predictions.csv",
+    "excluded_references.csv",
+    "attempts.csv",
+    "costs.csv",
+    "registry.csv",
+    "routing.csv"
+  ]
+}

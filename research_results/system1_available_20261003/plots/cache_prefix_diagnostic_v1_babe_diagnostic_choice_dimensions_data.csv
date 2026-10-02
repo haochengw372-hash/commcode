@@ -1,0 +1,4 @@
+epoch,dataset,split,method,dimension_id,primary,kind,estimand,original_labels,original_output_range,n_reference,n_predicted,coverage,accuracy,macro_f1,macro_f1_supported,n_original_classes,n_supported_classes,nll,nll_n,brier,probability_coverage,mae,rmse,normalized_mae,normalized_rmse,binomial_loss,n_rater_responses
+cache_prefix_diagnostic_v1,babe,diagnostic,llm_direct_cached_prefix,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,1000,392,0.392,0.313,0.44941321267865364,0.44941321267865364,2,2,,0,,0.0,,,,,,
+cache_prefix_diagnostic_v1,babe,diagnostic,llm_full_examples_cached_prefix,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,1000,264,0.264,0.206,0.3257573290514255,0.3257573290514255,2,2,,0,,0.0,,,,,,
+cache_prefix_diagnostic_v1,babe,diagnostic,llm_native_cached_prefix,label_bias,True,choice,category,"[""Non-biased"", ""Biased""]",,1000,488,0.488,0.386,0.5183730715287518,0.5183730715287518,2,2,,0,,0.0,,,,,,
