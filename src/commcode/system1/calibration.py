@@ -195,6 +195,8 @@ def _risk_model(rows: list[dict], oof: list[Any], dim: dict, model: dict) -> dic
     for row, p in zip(rows, oof, strict=True):
         if dim['kind'] == 'choice':
             index = max(range(len(p)), key=lambda j: p[j])
+            if model['method'] == 'identity' and row['answer'].get('label') in dim['labels']:
+                index = dim['labels'].index(row['answer']['label'])
             if model.get('threshold') is not None:
                 index = int(p[1] >= model['threshold'])
             error = float(index != row['y'])
@@ -271,6 +273,8 @@ class Calibrator:
             result['uncalibrated_label'] = answer.get('label')
             result['uncalibrated_probabilities'] = deepcopy(answer['probabilities'])
             index = max(range(len(p)), key=lambda j: p[j])
+            if model['method'] == 'identity' and answer.get('label') in dim['labels']:
+                index = dim['labels'].index(answer['label'])
             if model.get('threshold') is not None:
                 index = int(p[1] >= model['threshold'])
             result['label'] = dim['labels'][index]
@@ -417,11 +421,17 @@ def fit_calibration(book: Any, predictions: list[dict], references: list[dict], 
                               else 'insufficient calibration units/groups')
         if fit_thresholds and enough and kind == 'choice' and len(dim['labels']) == 2:
             truth = [r['y'] for r in rows]
-            candidates = [0.5] + [j / 20 for j in range(1, 20) if j != 10]
-            threshold = max(candidates, key=lambda t: _macro_f1(
-                truth, [int(p[1] >= t) for p in oof], 2))
-            if threshold != .5:
-                best['threshold'] = threshold
+            default_labels = [
+                dim['labels'].index(row['answer']['label'])
+                if best['method'] == 'identity' and row['answer'].get('label') in dim['labels']
+                else max(range(len(p)), key=lambda j: p[j])
+                for row, p in zip(rows, oof, strict=True)]
+            best_utility = _macro_f1(truth, default_labels, 2)
+            for threshold in [0.5] + [j / 20 for j in range(1, 20) if j != 10]:
+                utility = _macro_f1(truth, [int(p[1] >= threshold) for p in oof], 2)
+                if utility > best_utility + 1e-8:
+                    best_utility = utility
+                    best['threshold'] = threshold
         models[did] = best
         risks[did] = _risk_model(rows, oof, dim, best)
         summaries[did] = {'n_units': len(rows), 'n_groups': len(distinct),

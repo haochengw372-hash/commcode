@@ -1,5 +1,6 @@
 """Typed System One coding for original research codebooks and declared evidence."""
 
+from .corpus import encode_corpus
 from .engine import System1Encoder
 from .models import Book, Dimension, EvidencePacket, ValidationError
 from .parsing import parse_jev_response, parse_llm_response
@@ -7,6 +8,7 @@ from .providers import DispatchUncertain, Journal, Provider, ProviderRejected
 from .requests import build_jev_request, build_llm_request
 
 __all__ = [
+    "encode_corpus",
     "Book",
     "Dimension",
     "EvidencePacket",

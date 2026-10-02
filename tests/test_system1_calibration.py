@@ -186,3 +186,22 @@ def test_provider_confidence_is_preserved_and_pmax_is_distinct():
     assert output['calibrated_label_probability'] == output['probabilities'][output['label']]
     without_provider = model.apply({k: v for k, v in preds[0].items() if k != 'confidence'})
     assert 'confidence' not in without_provider
+
+
+def test_identity_preserves_provider_label_on_rounded_probability_tie():
+    model=fit_calibration(book(), [], [], fit_ids=[])
+    output=model.apply({'dimension_id':'d','label':'Yes',
+                        'probabilities':{'No':.5,'Yes':.5}})
+    assert output['label']=='Yes'
+    assert output['uncalibrated_label']=='Yes'
+
+
+def test_threshold_selection_compares_with_native_identity_decisions():
+    preds,refs,groups=data()
+    for pred in preds:
+        pred['probabilities']={'No':.5,'Yes':.5}
+    model=fit_calibration(book(),preds,refs,fit_ids=list(groups),
+                          group_by_id=groups,fit_thresholds=True)
+    assert model.models['d']['method']=='identity'
+    assert model.models['d']['threshold'] is None
+    assert [row['label'] for row in model.apply_rows(preds)]==[row['label'] for row in preds]

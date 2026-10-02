@@ -1,6 +1,6 @@
 # Release procedure
 
-The target is `commcode` version `0.2.0`. Version `0.1.0` was a local prototype;
+The target is `commcode` version `0.3.0`. Version `0.1.0` was a local prototype and `0.2.0` was an initial GitHub source release;
 this numbering does not imply that a prior version was published to PyPI.
 A successful local build does not establish that a public release exists.
 

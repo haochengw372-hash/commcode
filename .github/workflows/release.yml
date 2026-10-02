@@ -11,7 +11,7 @@ on:
       version:
         description: Exact package version
         required: true
-        default: '0.2.0'
+        default: '0.3.0'
       test_run_id:
         description: Successful matching TestPyPI workflow run (required for PyPI)
         required: false

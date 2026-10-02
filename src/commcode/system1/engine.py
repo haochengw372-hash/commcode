@@ -29,8 +29,10 @@ class System1Encoder:
     ):
         """Encode once, optionally replace selected cells, and persist raw and derived results.
 
-        selector receives predictions only and returns explicit target pairs. postprocess
-        receives predictions only. No reference labels are accepted by this runtime API.
+        postprocess calibrates base-provider predictions before selector sees them.
+        selector receives those predictions and returns explicit target pairs. LLM
+        replacement outputs retain their own labels and never pass through the base
+        postprocess callback. No reference labels are accepted by this runtime API.
         """
         if policy is not None:
             if not isinstance(policy, dict):
@@ -44,8 +46,19 @@ class System1Encoder:
         body = builder(packet, book, targets, prompt_family, coder, self.provider.model)
         record = self.provider.invoke(body, journal, cache_epoch)
         try:
-            predictions = parser(self.provider.response(record), packet, book, targets)
+            parser_options = {"prompt_family": prompt_family} if self.provider.kind == "jev" else {}
+            predictions = parser(
+                self.provider.response(record), packet, book, targets, **parser_options
+            )
             stages = [record]
+            if postprocess is not None:
+                predictions = postprocess(predictions)
+                expected_base = {
+                    (u["unit_id"], dim.id) for _, _, u, dim in cells(packet, book, targets)
+                }
+                actual_base = [(x["unit_id"], x["dimension_id"]) for x in predictions]
+                if len(set(actual_base)) != len(actual_base) or set(actual_base) != expected_base:
+                    raise ValidationError("Base postprocessing changed requested coverage")
             if selector is not None:
                 selected = selector(predictions)
                 if selected:
@@ -68,8 +81,6 @@ class System1Encoder:
                         replacements.get((x["unit_id"], x["dimension_id"]), x) for x in predictions
                     ]
                     stages.append(replacement_record)
-            if postprocess is not None:
-                predictions = postprocess(predictions)
             expected = {(u["unit_id"], dim.id) for _, _, u, dim in cells(packet, book, targets)}
             pairs = [(x["unit_id"], x["dimension_id"]) for x in predictions]
             if len(set(pairs)) != len(pairs) or set(pairs) != expected:

@@ -382,3 +382,321 @@ def test_default_llm_configuration_and_ungrounded_criterion_rejected():
     book.dimensions[0].criteria["Neutral"] = "a newly invented rule"
     with pytest.raises(ValidationError):
         build_jev_request(packet, book, prompt_family="anchored")
+
+
+def test_lossless_llm_known_wrappers_keep_raw_and_reject_extra_fields():
+    packet, book = inputs()
+    values = {"u0_d0": "Neutral", "u0_d1": 0.7, "u0_d2": 0.25}
+    for wrapper, step in (
+        ({"type": "json_object", "answers": values}, "removed_json_object_type_wrapper"),
+        (values, "wrapped_exact_top_level_answer_map"),
+    ):
+        original = json.dumps(wrapper)
+        response = {"choices": [{"message": {"content": original}}]}
+        rows = parse_llm_response(response, packet, book)
+        assert rows[0]["normalization"] == {"version": "llm-normalize-1", "steps": [step]}
+        assert response["choices"][0]["message"]["content"] == original
+    for wrapper in (
+        {"type": "other", "answers": values},
+        {"type": "json_object", "answers": values, "extra": 1},
+        dict(values, extra="Neutral"),
+    ):
+        with pytest.raises(ValidationError):
+            parse_llm_response(
+                {"choices": [{"message": {"content": json.dumps(wrapper)}}]}, packet, book
+            )
+
+
+def test_numeric_code_normalization_is_unique_and_never_boolean():
+    packet = EvidencePacket.from_dict([{"unit_id": "unit", "text": "Source."}])
+    book = Book.from_dict(
+        {
+            "book_id": "numeric",
+            "original_text": "Original binary codes.",
+            "dimensions": [
+                {
+                    "id": "code",
+                    "question": "Is this endorsed?",
+                    "kind": "choice",
+                    "labels": ["0", "1"],
+                }
+            ],
+        }
+    )
+
+    def llm(value):
+        return {"choices": [{"message": {"content": json.dumps({"answers": {"u0_d0": value}})}}]}
+
+    row = parse_llm_response(llm(1), packet, book)[0]
+    assert row["label"] == "1" and row["raw"] == 1
+    assert "integer_code_to_original_string" in row["normalization"]["steps"]
+    with pytest.raises(ValidationError):
+        parse_llm_response(llm(True), packet, book)
+    book.dimensions[0].labels = ["0", "0.0"]
+    with pytest.raises(ValidationError):
+        parse_llm_response(llm(0), packet, book)
+
+
+def test_grounded_opaque_labels_parent_binding_and_old_wire_isolation():
+    packet = EvidencePacket.from_dict(
+        [
+            {
+                "unit_id": "u",
+                "text": "A quoted comment.",
+                "context": {"full_source": "Original source."},
+            }
+        ]
+    )
+    raw_book = {
+        "book_id": "opaque",
+        "original_text": "Does this generalise? If yes, is the generalisation unfair? Yes. No.",
+        "dimensions": [
+            {
+                "id": "parent",
+                "question": "Does this generalise?",
+                "kind": "choice",
+                "labels": ["0", "1"],
+                "original_answer_mapping": {"0": "No", "1": "Yes"},
+            },
+            {
+                "id": "child",
+                "question": "If yes, is the generalisation unfair?",
+                "kind": "choice",
+                "labels": ["0", "1"],
+                "conditional_on": "parent",
+                "original_answer_mapping": {"0": "No", "1": "Yes"},
+            },
+        ],
+    }
+    book = Book.from_dict(raw_book)
+    frozen = build_jev_request(packet, book, prompt_family="compact")
+    grounded = build_jev_request(packet, book, prompt_family="grounded")
+    assert frozen == build_jev_request(packet, book, prompt_family="compact")
+    assert grounded["state"]["prompt_version"] == "grounded-1"
+    assert grounded["state"]["grounding_metadata"]["parent"]["response_mapping_kind"] == (
+        "declared_response_mapping"
+    )
+    assert "id" not in frozen["state"]["dimensions"][0]
+    assert grounded["state"]["dimensions"][0]["id"] == "parent"
+    assert grounded["questions"]["u0_d0"]["criteria"]["1"]["original_response"] == "Yes"
+    assert "Does this generalise?" in grounded["questions"]["u0_d1"]["instructions"]
+    assert (
+        "another question answer is not available" in grounded["questions"]["u0_d1"]["instructions"]
+    )
+    assert grounded["state"]["units"][0]["context"] == packet.units[0]["context"]
+    book.dimensions[1].conditional_on = "missing"
+    with pytest.raises(ValidationError):
+        build_jev_request(packet, book, prompt_family="grounded")
+    book.dimensions[1].conditional_on = "parent"
+    book.dimensions[1].original_answer_mapping["1"] = ""
+    with pytest.raises(ValidationError):
+        build_jev_request(packet, book, prompt_family="grounded")
+
+
+def test_grounded_rater_fraction_targets_original_response_event():
+    packet = EvidencePacket.from_dict([{"unit_id": "u", "text": "Move a heavy object."}])
+    book = Book.from_dict(
+        {
+            "book_id": "task",
+            "original_text": "Physical or Mental effort?",
+            "dimensions": [
+                {
+                    "id": "effort",
+                    "question": "Physical or Mental effort?",
+                    "kind": "noul",
+                    "estimand": "rater_fraction",
+                    "positive_original_response": "Physical",
+                }
+            ],
+        }
+    )
+    body = build_jev_request(packet, book, prompt_family="grounded")
+    instruction = body["questions"]["u0_d0"]["instructions"]
+    assert "randomly sampled original-study rater" in instruction
+    assert 'original response option "Physical"' in instruction
+    assert "Physical or Mental effort?" in instruction
+
+
+def test_calibration_before_routing_does_not_transform_llm_replacements(tmp_path):
+    packet, book = inputs()
+    calibration_calls = []
+    selected_after_cal = []
+
+    def calibrate(rows):
+        calibration_calls.append(rows)
+        return [dict(row, value=0.1) if row["kind"] == "noul" else row for row in rows]
+
+    def select(rows):
+        selected_after_cal.append(rows[1]["value"])
+        return [{"unit_id": "id1", "dimension_id": "fraction"}]
+
+    llm = Provider(
+        kind="llm",
+        transport=lambda *args: {
+            "choices": [{"message": {"content": '{"answers":{"u0_d1":0.9}}'}}]
+        },
+    )
+    result = System1Encoder(Provider(transport=lambda *args: response()), llm).encode(
+        packet, book, output_dir=tmp_path, postprocess=calibrate, selector=select
+    )
+    assert selected_after_cal == [0.1]
+    assert len(calibration_calls) == 1
+    assert result["predictions"][1]["value"] == 0.9
+
+
+def native_inputs(mapping=None, labels=None):
+    packet = EvidencePacket.from_dict(
+        [
+            {
+                "unit_id": "u",
+                "text": "I endorse this view.",
+                "context": {"source": "Complete evidence."},
+            }
+        ]
+    )
+    book = Book.from_dict(
+        {
+            "book_id": "native",
+            "original_text": "Is this endorsed? Yes. No.",
+            "dimensions": [
+                {
+                    "id": "endorsement",
+                    "question": "Is this endorsed?",
+                    "kind": "choice",
+                    "labels": labels or ["0", "1"],
+                    "original_answer_mapping": mapping,
+                }
+            ],
+        }
+    )
+    return packet, book
+
+
+@pytest.mark.parametrize(
+    "mapping,positive,negative",
+    [({"0": "No", "1": "Yes"}, "1", "0"), ({"0": "Yes", "1": "No"}, "0", "1")],
+)
+def test_native_source_boolean_projects_original_codes_including_reversed_mapping(
+    mapping, positive, negative
+):
+    packet, book = native_inputs(mapping)
+    native = build_jev_request(packet, book, prompt_family="native")
+    assert native["state"]["prompt_version"] == "native-1"
+    assert native["questions"]["u0_d0"]["type"] == "noul"
+    assert native["questions"]["u0_d0"]["criteria"]["true"]["original_response"] == "Yes"
+    assert "Target text: I endorse this view." in native["questions"]["u0_d0"]["instructions"]
+    raw = {"model": "actual", "answers": {"u0_d0": {"type": "noul", "noul": 0.8}}}
+    row = parse_jev_response(raw, packet, book, prompt_family="native")[0]
+    assert row["kind"] == "choice" and row["label"] == positive
+    assert row["probabilities"] == {positive: 0.8, negative: 1 - 0.8}
+    assert row["native_primitive"] == row["primitive_actual"] == "noul"
+    assert row["raw_noul"] == raw["answers"]["u0_d0"]
+    assert "confidence" not in row and "value" not in row
+    raw["answers"]["u0_d0"]["noul"] = 0.5
+    tied = parse_jev_response(raw, packet, book, prompt_family="native")[0]
+    assert tied["label"] == negative
+    assert tied["native_projection"]["tie_policy"] == "negative_at_half"
+    with pytest.raises(ValidationError):
+        parse_jev_response(raw, packet, book)
+
+
+@pytest.mark.parametrize(
+    "labels", [["Yes", "No"], ["Yes - Direct Content", "No - Indirect Content"]]
+)
+def test_native_literal_original_response_labels_preserved(labels):
+    packet, book = native_inputs(labels=labels)
+    assert (
+        build_jev_request(packet, book, prompt_family="native")["questions"]["u0_d0"]["type"]
+        == "noul"
+    )
+    raw = {"answers": {"u0_d0": {"type": "noul", "noul": 0.9}}}
+    row = parse_jev_response(raw, packet, book, prompt_family="native")[0]
+    assert row["label"] == labels[0]
+    assert set(row["probabilities"]) == set(labels)
+
+
+@pytest.mark.parametrize(
+    "labels,mapping",
+    [
+        (["No problem", "Yes please"], None),
+        (["Non-biased", "Biased"], None),
+        (["0", "1"], None),
+        (["Yes", "Neutral", "No"], None),
+        (["0", "1"], {"0": "Yes", "1": "Yes"}),
+    ],
+)
+def test_native_ambiguous_or_unmapped_categories_keep_original_choice(labels, mapping):
+    packet, book = native_inputs(mapping, labels)
+    request = build_jev_request(packet, book, prompt_family="native")
+    assert request["questions"]["u0_d0"]["type"] == "choice"
+    assert "Target text:" in request["questions"]["u0_d0"]["instructions"]
+    assert request["state"]["units"][0]["context"] == packet.units[0]["context"]
+    with pytest.raises(ValidationError):
+        parse_jev_response(
+            {"answers": {"u0_d0": {"type": "noul", "noul": 0.9}}},
+            packet,
+            book,
+            prompt_family="native",
+        )
+
+
+@pytest.mark.parametrize("bad", [True, float("nan"), -1, 2])
+def test_native_noul_invalid_values_rejected(bad):
+    packet, book = native_inputs({"0": "No", "1": "Yes"})
+    with pytest.raises(ValidationError):
+        parse_jev_response(
+            {"answers": {"u0_d0": {"type": "noul", "noul": bad}}},
+            packet,
+            book,
+            prompt_family="native",
+        )
+
+
+def test_native_conditional_parent_and_population_estimand_remain_distinct():
+    packet, book = native_inputs({"0": "No", "1": "Yes"})
+    from commcode.system1 import Dimension
+
+    book.original_text += " If yes, is it unfair? Physical or Mental effort?"
+    book.dimensions.append(
+        Dimension(
+            "unfair",
+            "If yes, is it unfair?",
+            "choice",
+            ["0", "1"],
+            original_answer_mapping={"0": "No", "1": "Yes"},
+            conditional_on="endorsement",
+        )
+    )
+    book.dimensions.append(
+        Dimension(
+            "population",
+            "Physical or Mental effort?",
+            "noul",
+            estimand="rater_fraction",
+            positive_original_response="Physical",
+        )
+    )
+    native = build_jev_request(packet, book, prompt_family="native")
+    assert "Is this endorsed?" in native["questions"]["u0_d1"]["instructions"]
+    assert 'original response option "Physical"' in native["questions"]["u0_d2"]["instructions"]
+    raw = {"answers": {key: {"type": "noul", "noul": 0.8} for key in native["questions"]}}
+    rows = parse_jev_response(raw, packet, book, prompt_family="native")
+    assert rows[0]["kind"] == rows[1]["kind"] == "choice"
+    assert rows[2]["kind"] == "noul" and rows[2]["value"] == 0.8
+    assert "native_projection" not in rows[2] and "label" not in rows[2]
+    frozen = build_jev_request(packet, book, prompt_family="grounded")
+    assert frozen["questions"]["u0_d0"]["type"] == "choice"
+    llm = build_llm_request(packet, book, prompt_family="native")
+    llm_questions = json.loads(llm["messages"][1]["content"])["questions"]
+    assert llm_questions["u0_d0"]["type"] == "choice"
+
+
+def test_native_encoder_passes_explicit_profile_to_projection_parser(tmp_path):
+    packet, book = native_inputs({"0": "No", "1": "Yes"})
+    provider = Provider(
+        transport=lambda *args: {"answers": {"u0_d0": {"type": "noul", "noul": 0.8}}}
+    )
+    result = System1Encoder(provider).encode(
+        packet, book, output_dir=tmp_path, prompt_family="native"
+    )
+    assert result["predictions"][0]["label"] == "1"

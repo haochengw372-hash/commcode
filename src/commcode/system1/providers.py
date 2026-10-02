@@ -151,16 +151,22 @@ class Provider:
         # Preserve raw HTTP body even if JSON decoding fails after a paid response.
         return {"_http_status": response.status, "_http_body": raw}
 
-    def invoke(self, body, journal, cache_epoch="v1", retry_rejected=False):
-        if body.get("model") != self.model:
-            raise ValidationError("Request model differs from provider model")
-        payload = {
+    def request_identity(self, body, cache_epoch="v1"):
+        return {
             "endpoint": self.endpoint,
             "kind": self.kind,
             "request": body,
             "cache_epoch": cache_epoch,
             "engine_version": "system1-2",
         }
+
+    def request_signature(self, body, cache_epoch="v1"):
+        return digest(self.request_identity(body, cache_epoch))
+
+    def invoke(self, body, journal, cache_epoch="v1", retry_rejected=False):
+        if body.get("model") != self.model:
+            raise ValidationError("Request model differs from provider model")
+        payload = self.request_identity(body, cache_epoch)
         signature = digest(payload)
         with journal.lock(signature):
             prior = journal.read(signature)

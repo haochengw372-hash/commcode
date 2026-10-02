@@ -1,17 +1,10 @@
 {
-  "book_id": "synthetic-feedback-v1",
-  "original_text": "Code whether the message offers a concrete suggestion. Use suggestion when it proposes a specific action; otherwise use other.",
+  "book_id": "synthetic-feedback-v2",
+  "original_text": "Code each message using three questions. Suggestion: Does it propose a concrete action? Answer Yes for a specific action, No otherwise. Courtesy event: Would an ordinary reader describe the message as courteous? Estimate the probability of a Yes response. Helpfulness: Rate practical helpfulness from 0 (no practical help), through 0.5 (some practical help), to 1 (clear actionable help).",
   "dimensions": [
-    {
-      "id": "suggestion",
-      "question": "Does the message offer a concrete suggestion?",
-      "kind": "choice",
-      "labels": ["suggestion", "other"],
-      "criteria": {
-        "suggestion": "it proposes a specific action",
-        "other": "otherwise"
-      }
-    }
+    {"id": "suggestion", "question": "Does it propose a concrete action?", "kind": "choice", "labels": ["Yes", "No"], "criteria": {"Yes": "a specific action", "No": "otherwise"}},
+    {"id": "courtesy", "question": "Would an ordinary reader describe the message as courteous?", "kind": "noul", "estimand": "rater_fraction", "positive_original_response": "Yes"},
+    {"id": "helpfulness", "question": "Rate practical helpfulness.", "kind": "score", "estimand": "continuous_rating", "criteria": ["no practical help", "some practical help", "clear actionable help"], "output_range": [0, 1]}
   ],
-  "provenance": {"type": "synthetic example authored for this package"}
+  "provenance": {"type": "synthetic tutorial authored for this package; no human gold labels"}
 }
