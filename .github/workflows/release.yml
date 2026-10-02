@@ -1,0 +1,136 @@
+name: Publish audited distributions
+run-name: CommCode ${{ inputs.target }} ${{ inputs.version }}
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Registry (TestPyPI must be verified first)
+        required: true
+        type: choice
+        options: [testpypi, pypi]
+      version:
+        description: Exact package version
+        required: true
+        default: '0.2.0'
+      test_run_id:
+        description: Successful matching TestPyPI workflow run (required for PyPI)
+        required: false
+permissions:
+  contents: read
+concurrency:
+  group: publish-${{ inputs.target }}-${{ inputs.version }}
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify requested version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          python - <<'PY'
+          import os, tomllib
+          assert tomllib.load(open('pyproject.toml','rb'))['project']['version'] == os.environ['RELEASE_VERSION']
+          PY
+      - if: inputs.target == 'testpypi'
+        run: |
+          python -m pip install '.[dev]' build twine
+          python -m pytest
+          python -m ruff check src tests examples scripts
+          python -m build
+          python -m twine check dist/*
+          python scripts/audit_release.py dist/* --output archive-audit.json
+          python examples/offline_demo.py
+      - name: Reuse verified TestPyPI artifacts
+        if: inputs.target == 'pypi'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TEST_RUN_ID: ${{ inputs.test_run_id }}
+          RELEASE_VERSION: ${{ inputs.version }}
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import json, os, subprocess
+          run_id = os.environ['TEST_RUN_ID']
+          assert run_id.isdecimal(), 'A successful TestPyPI run ID is required'
+          data=json.loads(subprocess.check_output(['gh','api',f'repos/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{run_id}']))
+          assert data['conclusion']=='success'
+          assert data['head_sha']==os.environ['EXPECTED_SHA']
+          assert data['event']=='workflow_dispatch'
+          assert data['path']=='.github/workflows/release.yml'
+          assert data['display_title']=='CommCode testpypi '+os.environ['RELEASE_VERSION']
+          subprocess.run(['gh','run','download',run_id,'--name','distributions','--dir','dist'],check=True)
+          subprocess.run(['gh','run','download',run_id,'--name','testpypi-verification','--dir','verification'],check=True)
+          report=json.load(open('verification/public-verification.json'))
+          assert report['version']==os.environ['RELEASE_VERSION'] and report['clean_install_and_offline_cli']=='passed'
+          PY
+          python scripts/audit_release.py dist/* --output archive-audit.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: dist/*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: archive-audit
+          path: archive-audit.json
+  publish-test:
+    if: inputs.target == 'testpypi'
+    needs: prepare
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/commcode
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+  publish-production:
+    if: inputs.target == 'pypi'
+    needs: prepare
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/commcode
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+  verify:
+    if: always() && (needs.publish-test.result == 'success' || needs.publish-production.result == 'success')
+    needs: [publish-test, publish-production]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          name: distributions
+          path: dist
+      - env:
+          REGISTRY: ${{ inputs.target }}
+          VERSION: ${{ inputs.version }}
+        run: python scripts/verify_public.py --index "$REGISTRY" --version "$VERSION" --dist dist --output public-verification.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.target }}-verification
+          path: public-verification.json

@@ -1,0 +1,14 @@
+include README.md LICENSE NOTICE pyproject.toml MANIFEST.in
+recursive-include src/commcode *.py
+recursive-include tests *.py
+recursive-include docs *.md
+recursive-include examples *.json *.py *.md
+recursive-include scripts *.py
+prune build
+prune dist
+prune .venv
+prune .venv-release
+prune .git
+prune .pytest_cache
+prune .ruff_cache
+global-exclude *.py[cod] __pycache__ .DS_Store .env .env.*

@@ -1,0 +1,17 @@
+{
+  "book_id": "synthetic-feedback-v1",
+  "original_text": "Code whether the message offers a concrete suggestion. Use suggestion when it proposes a specific action; otherwise use other.",
+  "dimensions": [
+    {
+      "id": "suggestion",
+      "question": "Does the message offer a concrete suggestion?",
+      "kind": "choice",
+      "labels": ["suggestion", "other"],
+      "criteria": {
+        "suggestion": "it proposes a specific action",
+        "other": "otherwise"
+      }
+    }
+  ],
+  "provenance": {"type": "synthetic example authored for this package"}
+}
