@@ -14,6 +14,7 @@ ROOT_FILES = {
     "README.md",
     "LICENSE",
     "NOTICE",
+    "CITATION.cff",
     "pyproject.toml",
     "MANIFEST.in",
     "PKG-INFO",
