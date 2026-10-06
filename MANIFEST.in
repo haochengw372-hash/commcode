@@ -1,4 +1,4 @@
-include README.md LICENSE NOTICE pyproject.toml MANIFEST.in
+include README.md LICENSE NOTICE CITATION.cff pyproject.toml MANIFEST.in
 recursive-include src/commcode *.py
 recursive-include tests *.py
 recursive-include docs *.md

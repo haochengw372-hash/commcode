@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
-authors = [{name = "CommCode contributors"}]
+authors = [{name = "Haocheng Wang"}, {name = "CommCode contributors"}]
 keywords = ["content-analysis", "communication-research", "annotation", "reproducibility"]
 classifiers = [
     "Development Status :: 3 - Alpha",

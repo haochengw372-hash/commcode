@@ -1,3 +1,5 @@
+> 使用请引用：如果你在论文、研究报告或项目中使用 CommCode，请引用 **Haocheng Wang (2026). CommCode**，并注明项目地址和所用版本。引用信息见 [CITATION.cff](CITATION.cff)。这是学术引用请求，不是额外的许可证限制。
+
 # CommCode
 
 CommCode is a Python library and command-line tool for coding a corpus with an
