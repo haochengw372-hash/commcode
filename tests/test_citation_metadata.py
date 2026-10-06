@@ -1,6 +1,6 @@
+import tomllib
 import unittest
 from pathlib import Path
-import tomllib
 
 
 class CitationMetadataTests(unittest.TestCase):
